@@ -11,11 +11,11 @@ import {
   getVideosDataByChannel,
   searchVideosAndChannels,
 } from "../controllers/video.controller.js";
-import { verifyToken } from "../middlewares/auth.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.use(verifyToken);
+router.use(verifyJWT);
 router.route("/").post(
   upload.fields([
     {

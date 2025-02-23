@@ -4,7 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import {
   uploadOnCloudinary,
   deleteFromCloudinary,
-} from "../utils/upload.cloudinary.js";
+} from "../utils/cloudinary.js";
 import { Video } from "../models/video.model.js";
 import { User } from "../models/user.model.js";
 import mongoose, { isValidObjectId } from "mongoose";
@@ -61,9 +61,6 @@ const addVideoToPlaylistUtility = asyncHandler(
 const publishVideo = asyncHandler(async (req, res, next) => {
   const { title, description, visibility } = req.body;
 
-  let playlistIds = [];
-  playlistIds = JSON.parse(req.body.playlistIds || "[]");
-
   if (!title) {
     return next(new ApiError(400, "title cannot be empty"));
   }
@@ -110,14 +107,6 @@ const publishVideo = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Handle adding the video to playlists
-  if (Array.isArray(playlistIds) && playlistIds.length > 0) {
-    for (const playlistId of playlistIds) {
-      console.log(`Adding video to playlist ${playlistId}`);
-
-      await addVideoToPlaylistUtility(videoDoc._id, playlistId, req);
-    }
-  }
 
   res
     .status(201)
